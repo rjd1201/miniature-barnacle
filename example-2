@@ -1,56 +1,54 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-void custom_sort(int *array, int size) {
-    // Diziyi küçükten büyüğe doğru sırala
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = i + 1; j < size; j++) {
-            if (array[i] > array[j]) {
-                int temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-            }
+// Diziyi sıralama fonksiyonu
+void sortArray(int arr[], int n) {
+    int temp;
+    for (int i = 0; i < n / 2; i++) {
+        // Dizinin sıralanmamış kısmındaki maksimum elemanı bul
+        int max_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] > arr[max_idx])
+                max_idx = j;
         }
-    }
 
-    // Geçici bir dizi oluştur- sıralı elemanları istenilen sırada yerleştir
-    int *temp = (int *)malloc(size * sizeof(int));
-    int left = 0, right = size - 1;
-    for (int i = 0; i < size; i++) {
-        if (i % 2 == 0) {
-            temp[i] = array[right--];
-        } else {
-            temp[i] = array[left++];
+        // Maksimum elemanı, sıralanmamış kısmının ilk elemanı ile değiştir
+        temp = arr[max_idx];
+        arr[max_idx] = arr[i];
+        arr[i] = temp;
+
+        // Dizinin sıralanmamış kısmındaki minimum elemanı bul
+        int min_idx = i + 1;
+        for (int j = i + 2; j < n; j++) {
+            if (arr[j] < arr[min_idx])
+                min_idx = j;
         }
-    }
 
-    // Sonucu orijinal diziye kopyala
-    for (int i = 0; i < size; i++) {
-        array[i] = temp[i];
+        // Minimum elemanı, sıralanmamış kısmının ikinci elemanı ile değiştir
+        temp = arr[min_idx];
+        arr[min_idx] = arr[n - i - 1];
+        arr[n - i - 1] = temp;
     }
-
-    // Geçici diziyi serbest bırak
-    free(temp);
 }
 
-void print_array(int *array, int size) {
-    for (int i = 0; i < size; i++) {
-        printf("%d ", array[i]);
+// Diziyi yazdırma fonksiyonu
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
     }
     printf("\n");
 }
 
 int main() {
-    int array[] = {60, 80, 3, 9, 57, 11};
-    int size = sizeof(array) / sizeof(array[0]);
+    int arr[] = {60, 80, 3, 9, 57, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
 
     printf("Orijinal dizi: ");
-    print_array(array, size);
+    printArray(arr, n);
 
-    custom_sort(array, size);
+    sortArray(arr, n);
 
-    printf("Özel sıralı dizi: ");
-    print_array(array, size);
+    printf("Sıralanmış dizi: ");
+    printArray(arr, n);
 
     return 0;
 }
