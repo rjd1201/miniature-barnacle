@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void custom_sort(int *array, int size) {
+    // Diziyi küçükten büyüğe doğru sırala
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = i + 1; j < size; j++) {
+            if (array[i] > array[j]) {
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+    }
+
+    // Geçici bir dizi oluştur- sıralı elemanları istenilen sırada yerleştir
+    int *temp = (int *)malloc(size * sizeof(int));
+    int left = 0, right = size - 1;
+    for (int i = 0; i < size; i++) {
+        if (i % 2 == 0) {
+            temp[i] = array[right--];
+        } else {
+            temp[i] = array[left++];
+        }
+    }
+
+    // Sonucu orijinal diziye kopyala
+    for (int i = 0; i < size; i++) {
+        array[i] = temp[i];
+    }
+
+    // Geçici diziyi serbest bırak
+    free(temp);
+}
+
+void print_array(int *array, int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int array[] = {60, 80, 3, 9, 57, 11};
+    int size = sizeof(array) / sizeof(array[0]);
+
+    printf("Orijinal dizi: ");
+    print_array(array, size);
+
+    custom_sort(array, size);
+
+    printf("Özel sıralı dizi: ");
+    print_array(array, size);
+
+    return 0;
+}
