@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define SIZE 500
+
+void generate_random_array(int *array, int size, int range) {
+    for (int i = 0; i < size; i++) {
+        array[i] = rand() % (range + 1);
+    }
+}
+
+void copy_array(int *source, int *destination, int size) {
+    for (int i = 0; i < size; i++) {
+        destination[i] = source[i];
+    }
+}
+
+void insertion_sort(int *array, int size) {
+    for (int i = 1; i < size; i++) {
+        int key = array[i];
+        int j = i - 1;
+        while (j >= 0 && array[j] > key) {
+            array[j + 1] = array[j];
+            j = j - 1;
+        }
+        array[j + 1] = key;
+    }
+}
+
+void selection_sort(int *array, int size) {
+    for (int i = 0; i < size - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < size; j++) {
+            if (array[j] < array[min_idx]) {
+                min_idx = j;
+            }
+        }
+        int temp = array[min_idx];
+        array[min_idx] = array[i];
+        array[i] = temp;
+    }
+}
+
+int main() {
+    int array[SIZE], array_copy[SIZE];
+    clock_t start, end;
+    double time_insertion_sort, time_selection_sort;
+
+    srand(time(NULL));
+
+    generate_random_array(array, SIZE, 1000);
+
+    copy_array(array, array_copy, SIZE);
+
+    start = clock();
+    insertion_sort(array, SIZE);
+    end = clock();
+    time_insertion_sort = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    start = clock();
+    selection_sort(array_copy, SIZE);
+    end = clock();
+    time_selection_sort = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    printf("Insertion Sort zaman: %f saniye\n", time_insertion_sort);
+    printf("Selection Sort zaman: %f saniye\n", time_selection_sort);
+
+    return 0;
+}
